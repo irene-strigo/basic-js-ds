@@ -18,9 +18,9 @@ class BinarySearchTree {
   }
 
   add(data) {
-    this._root = addWithin(this._root, data);
+    this._root = addNodes(this._root, data);
 
-    function addWithin(node, data) {
+    function addNodes(node, data) {
       if (!node) {
         return new Node(data);
       }
@@ -28,11 +28,10 @@ class BinarySearchTree {
       if (node.data === data) {
         return node;
       }
-
       if (data < node.data) {
-        node.left = addWithin(node.left, data);
+        node.left = addNodes(node.left, data);
       } else {
-        node.right = addWithin(node.right, data);
+        node.right = addNodes(node.right, data);
       }
 
       return node;
@@ -40,27 +39,24 @@ class BinarySearchTree {
   }
 
   has(data) {
-    return searchWithin(this._root, data);
+    return searchNodes(this._root, data);
 
-    function searchWithin(node, data) {
+    function searchNodes(node, data) {
       if (!node) {
         return false;
       }
-
       if (node.data === data) {
         return true;
       }
-
       return data < node.data ?
-        searchWithin(node.left, data) :
-        searchWithin(node.right, data);
+        searchNodes(node.left, data) :
+        searchNodes(node.right, data);
     }
   }
-
   find(data) {
-    return searchWithin(this._root, data);
+    return searchNodes(this._root, data);
 
-    function searchWithin(node, data) {
+    function searchNodes(node, data) {
       if (!node) {
         return null;
       }
@@ -68,21 +64,17 @@ class BinarySearchTree {
       if (node.data === data) {
         return node;
       }
-
       return data < node.data ?
-        searchWithin(node.left, data) :
-        searchWithin(node.right, data);
+        searchNodes(node.left, data) :
+        searchNodes(node.right, data);
     }
   }
-
   remove(data) {
     this._root = removeNode(this._root, data);
-
     function removeNode(node, data) {
       if (!node) {
         return null;
       }
-
       if (data < node.data) {
         node.left = removeNode(node.left, data);
         return node;
@@ -90,32 +82,26 @@ class BinarySearchTree {
         node.right = removeNode(node.right, data);
         return node;
       } else {
-        // equal - should remove this item
         if (!node.left && !node.right) {
-          // put null instead of item
           return null;
         }
 
         if (!node.left) {
-          // set right child instead of item
           node = node.right;
           return node;
         }
 
         if (!node.right) {
-          // set left child instead of item
           node = node.left;
           return node;
         }
-
-        // both children exists for this item
-        let minFromRight = node.right;
-        while (minFromRight.left) {
-          minFromRight = minFromRight.left;
+        let minRight = node.right;
+        while (minRight.left) {
+          minRight = minRight.left;
         }
-        node.data = minFromRight.data;
+        node.data = minRight.data;
 
-        node.right = removeNode(node.right, minFromRight.data);
+        node.right = removeNode(node.right, minRight.data);
 
         return node;
       }
